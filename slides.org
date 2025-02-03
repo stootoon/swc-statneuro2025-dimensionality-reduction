@@ -1,0 +1,444 @@
+#+BEAMER_HEADER: \title[Dimensionality Reduction using PCA]{Dimensionality Reduction using\newline Principal Component Analysis}
+#+TITLE: Dimensionality Reduction using\newline Principal Component Analysis
+#+BEAMER_SHORT_TITLE: Dimensionality Reduction using PCA
+#+AUTHOR: Sina Tootoonian
+#+DATE:
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [presentation,smaller]
+#+LaTeX_HEADER: \usetheme{Madrid}
+#+LaTeX_HEADER: \usefonttheme[onlymath]{serif}
+#+LaTeX_HEADER: \usecolortheme{default}
+#+LaTeX_HEADER: \AtBeginSection{\frame{\sectionpage}}
+#+LaTeX_HEADER: \input{preamble.tex}
+#+OPTIONS: H:2 toc:t title:t
+#+EXPORT_EXCLUDE_TAGS: noexport
+* Motivation
+** DONE Neuroscience data arrive high dimensional
+CLOSED: [2025-02-02 Sun 08:30]
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Response of 150 olfactory glomeruli to 48 odours (Tobias Ackels)
+[[file:figures/heatmap.png]]
+** DONE Visualization requires 2-3 dimensions
+CLOSED: [2025-02-02 Sun 08:30]
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Odour responses of two ROIs, vs. two principal components.
+[[file:figures/PCA.png]]
+** DONE High-D data can be embeddings of low-D manifolds
+CLOSED: [2025-02-02 Sun 07:31]
+# - High-dimensional data sometimes 'live' on low-d manifold
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: `Swiss roll' dataset from Tenenbaum et al. 2000.
+[[file:figures/swiss_roll.png]]
+** DONE Data compression / approximation / denoising
+CLOSED: [2025-02-02 Sun 08:51]
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Raw odour responses and 2-component approximation.
+[[file:figures/rank2_approx.png]]
+** DONE Key idea behind PCA
+CLOSED: [2025-02-02 Sun 14:15]
+   \begin{center}
+\Large
+Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
+\end{center}
+# Add a vertical space
+\vspace{1cm}
+- What do we mean by \emph{directions}?
+- What do we mean by \emph{variance}?
+- Why is \emph{maximizing} a good idea?
+** DONE Key idea behind PCA
+CLOSED: [2025-02-02 Sun 14:15]
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Projecting data (A) along directions that capture much (B) or little (C) variance. From CS 229.
+[[file:figures/example_proj.png]]
+** IN PROGRESS Outline
+- Variance of single neurons
+  - Coordinates for data
+  - Summarizing single neuron activity with variance
+    
+- Neurons and Pseudo-neurons 
+- Measuring activity of single neurons with variance
+- Measuring co-activity of neurons with covariance
+- Relating variance of pseudo-neurons to covariance
+* Variance of Single Neurons
+** DONE Notions of dimensionality
+CLOSED: [2025-02-02 Sun 07:32]
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/swiss_roll.png]]  
+- Extrinsic dimension
+- Intrinsic dimension
+  - Lower because of correlations in the data
+- PCA: Find the intrinsic, \bold{linear} dimension    
+** DONE The importance of coordinate systems
+   CLOSED: [2025-01-31 Fri 06:24]
+- Laws of physics don't depend on coordinates.
+- Laws of neuroscience depends on having the right coordiantes
+  - Usually not the ones your data is recorded in.
+- PCA finds coordinates that are \bold{matched to the data}.    
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/pca_illustration.png]]  
+** DONE Standard coordinates
+CLOSED: [2025-02-02 Sun 09:10]
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/one_odour_response.png]]
+- Notice implicit coordinates:
+  \begin{align*}
+  \xx &= [x_1, x_2, \dots ] \\
+  &=x_1 \ee_1 + x_2 \ee_2 + \dots
+  \end{align*}
+- Each coordinate $\ee_1$, $\ee_2$ corresponds to unit activity of one neuron.
+** DONE Coordinates are orthonormal
+CLOSED: [2025-02-02 Sun 09:23]
+\vspace{-0.25cm}
+#+ATTR_LATEX: :width 1.0\textwidth
+file:figures/one_odour_response.png
+$$\xx = x_1 \ee_1 + x_2 \ee_2 \dots$$
+\vspace{-0.25cm}
+- The coordinate system $\{ \ee_1, \ee_2, \dots \}$ is:
+  - Complete: We can represent any activity vector in it.
+  - Ortho...  $$ \ee_1^T\ee_2  = 0, \dots $$
+  - ...normal $$\ee_1^T \ee_1  = 1, \quad \ee_2^T\ee_2  = 1, \dots$$
+** DONE Extracting single unit responses by projection
+CLOSED: [2025-02-02 Sun 10:19]
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/projections.png]]
+  $$ x_1 = \xx^T \ee_1 = \ee_1^T \xx $$
+** DONE Different ways of summarizing activity
+CLOSED: [2025-02-02 Sun 10:36]
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/neuron0.png]]  
+- Mean?
+  $$ \overline{x}_1 = {1 \over \text{\# stimuli}} \sum_{\color{red}\mu\color{black}} x_{1,\color{red}\mu\color{black}} = \langle x_{1,\mu} \rangle.$$
+- Absolute value? $$\overline{|x_1|} = \langle |x_{1,\mu}| \rangle$$
+- Absolute value relative to mean?
+  $$ \overline{|x_1 - \overline{x}_1|} = \langle |x_{1,\mu} - \overline{x}_1 | \rangle.$$    
+- Squared value?
+  $$ \overline{x^2_1} = \langle x^2_{1,\mu} \rangle$$    
+** DONE Variance of a single neuron
+CLOSED: [2025-02-02 Sun 10:45]
+  $$ \var(x_1) = \langle (x_{1,\mu} - \overline{x}_1)^2 \rangle.$$
+- Average energy relative to the mean
+- Mathematically tractable \color{green}\checkmark\color{black}
+- Susceptible to outliers \color{red}\textbf{X}\color{black}
+#+ATTR_LATEX: :width 0.5\textwidth
+[[file:figures/variance_vs_mad.png]]
+* Variance of Pseudo-Neurons
+** TODO Where we're going
+- Remember: PCA is about finding directions that maximize variance.
+- Just as the standard coordinate direction  
+** DONE Variance of a single neuron (again)
+CLOSED: [2025-02-02 Sun 11:23]
+- Previously we just `took' the data for neuron 1.
+- We can view this as first projecting along the first coordinate: $$x_{1,\mu} = \xx_\mu^T \ee_1$$
+- Then computing variance $$\var(x_1) = \langle (x_{\mu,1} - \overline{x}_1)^2 \rangle$$
+- Variance of neuron 1 is variance along $\ee_1$.  
+** DONE Other orthonormal coordinates
+CLOSED: [2025-02-02 Sun 10:04]
+We can describe the same activity in terms of `pseudo-neurons.'
+$$ \xx = \tilde x_1 \tilde \ee_1 + \tilde x_2 \tilde \ee_2 + \dots $$
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Responses of neurons and pseudo-neurons to the first odour.
+file:figures/coordinate_transform.png
+** CANCELED Example: Sounds                                        :noexport:
+CLOSED: [2025-02-02 Sun 10:04]
+- FIG: Default coordinates: 
+- FIG: Frequency coordinates: 
+** DONE Covariance of neural populations
+CLOSED: [2025-02-02 Sun 11:06]
+- Neurons don't respond independently, but frequently \textbf{co}vary
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/correlation.png]]  
+- \color{red}\textbf{Co}\color{black}variance measures covariation of a neuron with another:
+  $$ \cov(x_1, x_2) &= \langle (x_{1,\mu} - \overline{x}_1)(x_{\red{2},\mu} - \overline{x}_{\red{2}}) \rangle.$$
+- Variance is covariation of a neuron with itself!
+  \begin{align*} \var(x_1) &= \langle (x_{1,\mu} - \overline{x}_1)^2 \rangle\\
+  &= \langle (x_{1,\mu} - \overline{x}_1)(x_{1,\mu} - \overline{x}_1) \rangle.
+  \end{align*}  
+** DONE Covariance matrix 
+CLOSED: [2025-02-02 Sun 11:17]
+- The \textbf{covariance matrix} tabulates covariance for all pairs of neurons.
+  \[\cov(\xx) = \begin{bmatrix}\var(x_1) & \cov(x_1, x_2) & \dots \\ \cov(x_1, x_2) & \var(x_2) & \dots \\ \vdots & \vdots & \ddots \end{bmatrix} = \langle (\xx_\mu - \overline{\xx})(\xx_\mu - \overline{\xx})^T \rangle \]
+- Diagonals have variances
+- Off-diagonals have covariances
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/covariance_matrix.png]]  
+- Not just useful book keeping...
+** CANCELED Default coordinates can hide covariability             :noexport:
+CLOSED: [2025-02-02 Sun 11:21]
+- Default coordinates hide covariability
+- FIG: Data with same marginal variance]
+** CANCELED Changing to data coordinates                           :noexport:
+CLOSED: [2025-02-02 Sun 11:21]
+- Solution: change coordinates!
+- FIG: Data in stadnard coords, data in rotated coords]
+# [FIG: Network diagram]  
+** DONE Variance of one pseudoneuron
+   CLOSED: [2025-01-31 Fri 06:50]
+- Activity of a \bold{pseudo}neuron:
+  $$ \tilde{x}_{1,\mu} = \xx_\mu^T \uu_1 $$
+- Mean activity of a pseudoneuron:
+  \begin{align*}
+  \overline{\tilde{x}}_1 &= \langle \xx_\mu^T \uu_1 \rangle\\
+  &= \langle \xx^T_\mu \rangle \uu_1\\
+  &= \overline{\xx}^T  \uu_1.
+  \end{align*}
+- Variance of a pseudoneuron
+\begin{align*}
+\var(\tilde x_1) &= \langle (\tilde x_1 - \overline{\tilde x}_1)^2 \rangle \\
+&= \langle \left( \xx_\mu^T \uu_1  - \overline{\xx}_\mu^T \uu_1 \right)^2 \rangle
+\end{align*}
+** DONE Variance of \emph{any} pseudoneuron
+CLOSED: [2025-02-02 Sun 07:11]
+- We don't have to go through the procedure again!
+- Variance of any pseudoneuron $\tilde x = \xx^T\uu$ is
+  $$ \var(\tilde x) = \uu^T \cov(\xx) \uu.$$
+- PCA now becomes finding the $\uu$ that maximizes this variance.
+- How do we do this?  
+* Some Facts about Matrices
+** DONE Matrices
+CLOSED: [2025-02-02 Sun 11:39]
+- Some matrices we've already encountered:
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/covariance_matrix.png]]  
+- Data matrix (rectangular)
+- Covariance matrix (square, symmetric)
+  - Why is it symmetric?
+** DONE Different ways to view matrices
+CLOSED: [2025-02-01 Sat 18:20]
+# - Hello
+\[ \mathbf{A} = \underbrace{\begin{bmatrix} A_{11}, & A_{12}, & \dots \\ A_{21}, & A_{22} & \dots \\ \vdots & \vdots & \ddots \end{bmatrix}}_{\text{Table of elements}} = \underbrace{\begin{bmatrix} \rr_1^T \\ \rr_2^T \\ \vdots \\ \rr_M^T \end{bmatrix}}_{\text{Stacked rows}} = \underbrace{\begin{bmatrix} \cc_1,& \cc_2, & \cc_3, & \dots & \cc_N \end{bmatrix}}_{\text{Stacked columns}}. \]
+** DONE Matrix operations
+   CLOSED: [2025-01-31 Fri 06:52]
+- \bold{Linearly} transform N-dimensional inputs $\xx$ into M-dimensional outputs $\yy$, \[ \yy = \mathbf{A} \xx.\]
+- Can think of this element-wise:
+  $$ y_i = \sum_{j=1}^N A_{ij} x_j.$$
+- Can think of this as projecting $\xx$ on each row,
+  $$ \yy = \begin{bmatrix} y_1 \\ y_2\\ \vdots\\ y_M \end{bmatrix} = \begin{bmatrix} \rr_1^T \xx \\ \rr_2^T \xx \\ \vdots\\ \rr_M^T \xx \end{bmatrix}.$$
+- Can think of this as summing the columns, weighted by $\xx$,
+  $$ \yy = \sum_{i=1}^N \cc_i x_i.$$
+** DONE Example Matrices
+   CLOSED: [2025-01-31 Fri 06:53]
+   \centering
+\begin{array}{l c l}
+\textbf{Name} & \textbf{Matrix } \mathbf{A}  & \textbf{Action } \yy = \mathbf{A} \xx \\ \hline
+\text{Zero} & \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} & \yy = \mathbf{0} \\[10pt]
+\text{Identity} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \yy = \xx \\[10pt]
+\text{All ones} & \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} & \yy = \begin{bmatrix}\sum_i x_i \\ \sum_i x_i \end{bmatrix} \\[10pt]
+\text{Uniform scaling} & \begin{bmatrix} k & 0 \\ 0 & k \end{bmatrix} & \yy = \begin{bmatrix} k  x_1  \\ k x_2 \end{bmatrix} \\[10pt]
+\text{Diagonal} & \begin{bmatrix} a & 0 \\ 0 & b \end{bmatrix} & \yy = \begin{bmatrix} a x_1 \\ b x_2 \end{bmatrix} \\[10pt]
+\text{Permutation} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \yy = \begin{bmatrix} x_2 \\ x_1 \end{bmatrix} \\[10pt]
+\text{Rotation} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \yy \text{ is $\xx$ rotated by $\theta$.}
+\end{array}
+** DONE Composing transformations
+CLOSED: [2025-02-01 Sat 20:58]
+- We can form complex transformations by composing simple ones.
+- For example, a scaling and a rotation:
+$$ \yy = \underbrace{\begin{bmatrix} a & 0 \\ 0 & b \end{bmatrix}}_{\text{scaling}} \underbrace{\begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix}}_{\text{rotation}} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \underbrace{\mathbf{D R}}_{\mathbf A} \xx.$$
+* Singular Value Decomposition
+** DONE All matrices are diagonal matrices (in the right coordinates)
+CLOSED: [2025-02-01 Sat 21:14]
+- Diagonal matrices were easy to work with
+\begin{center}
+\begin{bmatrix} a & 0 \\ 0 & b \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} a x_1 \\ b x_2 \end{bmatrix}
+\end{center}
+- What about an arbitrary matrix? Looks complex...
+\begin{center}
+\begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix}  \sum_j A_{1j} x_j \\ \sum_j A_{2j} x_j \end{bmatrix}.
+\end{center}
+- Surprise: Every matrix $\AA$ is the composition of just three operations!
+  $$ \AA  = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}}.$$
+** DONE Three parts of Singular Value Decomposition
+CLOSED: [2025-02-02 Sun 11:45]
+  $$ \AA  = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}}.$$
+- Columns of $\VV$ form orthonormal coordinates for the \bold{input} space.
+- Columns of $\UU$ form orthonormal coordinates for the \bold{output} space
+- Diagonal matrix $\SS$ of non-negative \bold{singular values} apply a scaling.
+- If we:
+  - Use $\VV$ coordinates for the input, and
+  - Use $\UU$ coordinates for the output, then
+  - $\AA$ is a scaling!
+** DONE Three parts of Singular Value Decomposition
+CLOSED: [2025-02-02 Sun 11:45]
+#+ATTR_LATEX: :width 0.6\textwidth
+#+CAPTION: Three parts of Singular Value Decomposition (Wikipedia).
+[[file:figures/svd_parts.png]]  
+** DONE Three steps of Singular Value Decomposition
+CLOSED: [2025-02-01 Sat 22:51]
+  $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}} \xx.$$
+1. Project $\xx$ onto the input coordinates:
+   \[ \VV^T \xx = \begin{bmatrix} \vv_1^T \xx \\ \dots \\ \vv_N^T \xx \end{bmatrix} = \begin{bmatrix} \tilde x_1 \\ \dots \\ \tilde x_N \end{bmatrix} \]
+2. Scale by $\SS$:
+   \[ \SS \VV^T \xx = \begin{bmatrix} s_1 & 0 & \dots \\ 0 & s_2 & \dots \\ \vdots & \vdots & \ddots \\ \end{bmatrix} \begin{bmatrix} \tilde x_1 \\ \dots \\ \tilde x_N \end{bmatrix} = \begin{bmatrix} s_1 \tilde x_1 \\ s_2 \tilde x_2 \\ \dots \\ s_N \tilde x_N \end{bmatrix} \]
+3. Project out using the output coordinates
+   \[ \UU \SS \VV^T \xx = [\uu_1, \uu_2, \dots, \uu_N] \begin{bmatrix}s_1 \tilde x_1 \\ s_2 \tilde x_2 \\ \dots \\ s_N \tilde x_N \end{bmatrix} = \uu_1 s_1 \tilde x_1 + \uu_2 s_2 \tilde x_2 + \dots  \]
+** DONE SVD of simple matrices
+CLOSED: [2025-02-02 Sun 12:01]
+   \centering
+\begin{array}{l c c c c}
+\textbf{Name} & \mathbf{A}  & \UU & \mathbf{s} & \VV \\ \hline
+\text{Zero} & \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \begin{bmatrix} 0, & 0\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
+\text{Identity} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
+\text{Negation} & \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} & \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
+\text{All ones} & \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} & {1\over \sqrt{2}}\begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix} & \begin{bmatrix} 2, & 0\end{bmatrix} & {1 \over \sqrt{2}}\begin{bmatrix} 1 & 1 \\ -1 & 1 \end{bmatrix} \\[10pt]
+\text{Diagonal} & \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \begin{bmatrix} 2, & 3\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
+\text{Permutation} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} \\[10pt]
+\text{Rotation by $\theta$} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt] 
+\end{array}
+
+** DONE SVD of covariance matrices
+CLOSED: [2025-02-01 Sat 22:15]
+- Remember why we care: we're after the variance of pseudoneurons $$\uu^T \cov(\xx) \uu.$$
+- For covariance matrices, the input and output coordinates are the same $$ \cov(\xx) = \VV \SS \VV^T $$
+- Equalizer: Inputs are analyzed in $\VV$ coordinates and scaled. $$  \cov(\xx) \uu = \sum_i \vv_i \underbrace{s_i}_{\text{scale}} \underbrace{\vv_i^T \uu}_{\text{project}} $$
+# - Same as eigendecomposition (for covariance matrices!)
+** TODO SVD and Eigendecomposition                                 :noexport:
+- FIG: Data with different participation ratios
+- Square matrices: Transforming the same space
+- U S V'
+- We can express as operations in the same coordinates
+- U G U'
+- G will be complex
+* Maximum Variance Directions
+** DONE Maximum variance direction from SVD
+CLOSED: [2025-02-01 Sat 22:31]
+- We can use SVD to read-off the maximum variance direction(s) we need!
+- Variance along a direction $\uu$
+  \begin{align*} \uu^T \cov(\xx) \uu &= \uu^T \underbrace{\left(\sum_i \vv_i s_i \vv_i^T\right)}_{\text{SVD}} \uu\\
+  &= \sum_i (\uu^T \vv_i) s_i (\vv_i^T \uu)\\
+  &= \sum_i s_i (\vv_i^T \uu)^2
+  \end{align*}
+- Maximum variance direction is $\vv_1$
+- Next highest variance direction is $\vv_2$, etc.
+** DONE Finally: Dimension Reduction with PCA
+CLOSED: [2025-02-02 Sun 14:25]
+- Project data onto maximum variance directions
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/pca_projections.png]]
+- Notice: projections are decorrelated
+** DONE Examining the Principal Components
+CLOSED: [2025-02-02 Sun 14:52]
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/pca_projections_pcs.png]]
+** DONE Measuring dimensionality with Participation Ratio
+CLOSED: [2025-02-02 Sun 12:20]
+- Variances tell us energy in each direction
+- Use this as a measure of dimensionality
+  $$ \text{PR} = {(\sum_i s_i)^2 \over \sum_i s_i^2}.$$
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/participation_ratio.png]]  
+** DONE Approximation/Denoising with PCA
+CLOSED: [2025-02-02 Sun 12:31]
+- Approximate using first $K$ projections
+  \begin{align*}
+  \xx &\approx \underbrace{\sum_{i=1}^K (\xx^T \vv_i) \vv_i}_{\text{Exact}} + \underbrace{\sum_{i=K+1}^D (\overline{\xx}^T \vv_i) \vv_i}_{\text{Approximation}}.\\
+  &\approx  \overline{\xx} + \sum_{i=1}^K (\xx - \overline{\xx})^T \vv_i \vv_i
+  \end{align*}
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Approximating digits data using PCA (Bishop Fig 12.5)
+[[file:figures/bishop_approx.png]]
+** DONE Approximation/Denoising with PCA
+CLOSED: [2025-02-02 Sun 12:44]
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Approximating odour responses using PCA.
+[[file:figures/pca_tobias.png]]
+** DONE How many dimensions to keep?
+CLOSED: [2025-02-02 Sun 13:57]
+- The singular values tell us how much variance is explained by each dimension.
+- We can use this to decide how many dimensions to keep.
+- \bold{Explained variance} measures the fraction of variance explained by the first $K$ dimensions:
+  $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Explained variance for odour responses dataset.
+[[file:figures/explained_variance.png]]
+** CANCELED Examples: Digits dataset                               :noexport:
+CLOSED: [2025-02-01 Sat 22:48]
+** CANCELED Examples: Faces dataset                                :noexport:
+CLOSED: [2025-02-01 Sat 22:48]
+* Adjacent Approaches [3/3]
+** DONE Exploiting nonlinearity with Kernel PCA
+CLOSED: [2025-02-02 Sun 12:52]
+- PCA can be expressed in terms of similarity $k(\xx,\yy)$ between data points.
+- PCA uses linear similarity $k(\xx, \yy) = \xx^T \yy$.
+- Kernel PCA generalises this to allow other similarity measures.
+- Nonlinear measures are sometimes appropriate.
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: ISOMAP computes similarity as distance on the manifold.
+[[file:figures/swiss_roll.png]]
+** DONE Comparing different datasets with CCA
+CLOSED: [2025-02-02 Sun 15:46]
+- PCA finds maximum variance directions in one dataset
+- CCA finds maximum co-variance directions in two datasets
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/cca_projections.png]]  
+** DONE Supervised learning with LDA
+CLOSED: [2025-02-02 Sun 13:43]
+- PCA doesn't care about class labels.
+- Maximum variance isn't always best for discrimination.
+- LDA: Finds directions that best discriminate data.
+#+ATTR_LATEX: :width 0.7\textwidth
+#+CAPTION: (Bishop Fig. 12.7) The first PC isn't always best for discrimination.
+file:figures/pca_lda.png]]
+* TODO Summary
+** TODO Summary
+
+* CANCELED PCA for approximation [0/5]                             :noexport:
+** TODO Example of approximation
+- Recall original definition of data vectors
+x = x_1 e_1 + x_2 e_2 + ...
+- Lots of numbers, per stimulus
+- How to approximate this with one number?
+- Pick the largest coefficient?
+x~ = (x, e*) e*
+** TODO Measuring distortion
+- average squared error between data and approximation
+- J = 1/n sum |x_n - x_n~|^2
+- We're looking for an M-component approximation
+** TODO Linear approximation in coordinates
+- For any coordinate system, each data point is
+x_n = \sum x_n.u_i u_i + \sum x_n.u_j u_j
+- An M-value approximation is
+$x_n~ = \sum x_n.u_i u_i + (b = \sum b_j u_j)$
+- Distortion
+  J = 1/n |\sum_j (x_n.u_j - b_j)|
+- b = x_ . U
+[Figure:data in coordinates]
+[Figure:approximation]
+** TODO Finding the best coordinates
+J = 1/n \sum_n \sum_j((x_n - x_).u_j)^2
+- Variance of pseudo-neurons
+- Minimize: pick directions with the _least_ variance
+** TODO PCA for approximation and denoising
+x_n = x_ + \sum_m (x - x_).u_j u_j
+[Fig: Reconstruction]
+[Fig: Distortion]
+[Fig: Variance explained]
+* CANCELED Extensions [0/6]                                        :noexport:
+** TODO PCA as autoencoder
+- Natural inputs appear high dimensional
+- But are structured: low dimensional
+- Autoencoding: find low-dimensional representation that reproduces the inputs.
+- FIG: Autoencoder
+- PCA does this linearly
+- Nonlinear activation functions don't matter.
+** TODO Manifold learning 
+- Manifold: A surface that locally likes like Euclidean space
+- High-D data lives on a low-d manifold
+- Low-dimensional representations as coordinates on a manifold
+- PCA: Manifold is a (linear) subspace + offset
+- Perturbations off the manifold are noise
+- Nonlinear manifolds are possible!
+- Examples: ISOMAP, LLE
+** TODO Latent variables
+- Manifold coordinates are latent variables
+- Latent = unobserved quantities that explain the observations
+** TODO Probabilistic PCA
+- x = A z + b + e, z ~ N(0,I)
+** TODO Factor analysis
+- x = A z + b + d, z ~ N(0, I)
+** TODO ICA
+- x = A z , z ~ non-gaussian
+
+  
+
+
+
+
