@@ -1,4 +1,4 @@
-% Created 2025-02-03 Mon 11:46
+% Created 2025-02-03 Mon 12:20
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,smaller]{beamer}
 \usepackage[utf8]{inputenc}
@@ -12,6 +12,8 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
+\institute{The Francis Crick Institute, London \\ \href{mailto:sina.tootoonian@crick.ac.uk}{sina.tootoonian@crick.ac.uk}}
+\date{\today}
 \usetheme{Madrid}
 \usefonttheme[onlymath]{serif}
 \usecolortheme{default}
@@ -19,7 +21,7 @@
 \input{preamble.tex}
 \usetheme{default}
 \author{Sina Tootoonian}
-\date{}
+\date{\today}
 \title{Dimensionality Reduction using\newline Principal Component Analysis}
 \title[Dimensionality Reduction using PCA]{Dimensionality Reduction using\newline Principal Component Analysis}
 \hypersetup{
@@ -32,41 +34,37 @@
 \begin{document}
 
 \maketitle
-\begin{frame}{Outline}
-\tableofcontents
-\end{frame}
-
 \section{Motivation}
-\label{sec:org14c7e8b}
-\begin{frame}[label={sec:org4c7cf05}]{Neuroscience data arrive high dimensional}
+\label{sec:orgfb97aec}
+\begin{frame}[label={sec:org269e492}]{Neuroscience data arrive high dimensional}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/heatmap.png}
 \caption{Response of 150 olfactory glomeruli to 48 odours (Tobias Ackels)}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org2f4f994}]{Visualization requires 2-3 dimensions}
+\begin{frame}[label={sec:orgc331d22}]{Visualization requires 2-3 dimensions}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/PCA.png}
 \caption{Odour responses of two ROIs, vs. two principal components.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org1f8b705}]{High-D data can be embeddings of low-D manifolds}
+\begin{frame}[label={sec:org5af23db}]{High-D data can be embeddings of low-D manifolds}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/swiss_roll.png}
 \caption{`Swiss roll' dataset from Tenenbaum et al. 2000.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:orgd12f4ef}]{Data compression / approximation / denoising}
+\begin{frame}[label={sec:org0ded918}]{Data compression / approximation / denoising}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/rank2_approx.png}
 \caption{Raw odour responses and 2-component approximation.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org9808c67}]{Key idea behind PCA}
+\begin{frame}[label={sec:org0b9ab9a}]{Key idea behind PCA}
    \begin{center}
 \Large
 Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
@@ -79,14 +77,14 @@ Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
 \item Why is \emph{maximizing} a good idea?
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org0906655}]{Key idea behind PCA}
+\begin{frame}[label={sec:orgf172cf7}]{Key idea behind PCA}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/example_proj.png}
 \caption{Projecting data (A) along directions that capture much (B) or little (C) variance. From CS 229.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org4666287}]{Outline}
+\begin{frame}[label={sec:orgab95f7e}]{Outline}
 \begin{enumerate}
 \item Single neurons
 \begin{itemize}
@@ -111,8 +109,8 @@ Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
 \end{enumerate}
 \end{frame}
 \section{Variance of Single Neurons}
-\label{sec:org5c3f6ee}
-\begin{frame}[label={sec:org9ff128c}]{Notions of dimensionality}
+\label{sec:org0371541}
+\begin{frame}[label={sec:orgce30bfc}]{Notions of dimensionality}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/swiss_roll.png}
 \end{center}  
@@ -125,10 +123,10 @@ Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
 \item PCA: Find the intrinsic, \bold{linear} dimension
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:orgf3f48a8}]{The importance of coordinate systems}
+\begin{frame}[label={sec:orgae26422}]{The importance of coordinate systems}
 \begin{itemize}
 \item Laws of physics don't depend on coordinates.
-\item Laws of neuroscience depends on having the right coordiantes
+\item Laws of neuroscience depends on having the \bold{right} coordinates.
 \begin{itemize}
 \item Usually not the ones your data is recorded in.
 \end{itemize}
@@ -138,7 +136,7 @@ Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
 \includegraphics[width=1.0\textwidth]{figures/pca_illustration.png}
 \end{center}  
 \end{frame}
-\begin{frame}[label={sec:org6f99866}]{Standard coordinates}
+\begin{frame}[label={sec:org21a6e99}]{Standard coordinates}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/one_odour_response.png}
 \end{center}
@@ -151,7 +149,7 @@ Find \bold{directions} in data space that \bold{maximize} \bold{variance}.
 \item Each coordinate \(\ee_1\), \(\ee_2\) corresponds to unit activity of one neuron.
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:orgf3bac90}]{Coordinates are orthonormal}
+\begin{frame}[label={sec:orga97bcef}]{Coordinates are orthonormal}
 \vspace{-0.25cm}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/one_odour_response.png}
@@ -167,13 +165,13 @@ $$\xx = x_1 \ee_1 + x_2 \ee_2 \dots$$
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org62c26cd}]{Extracting single unit responses by projection}
+\begin{frame}[label={sec:org4e72935}]{Extracting single unit responses by projection}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/projections.png}
 \end{center}
   $$ x_1 = \xx^T \ee_1 = \ee_1^T \xx $$
 \end{frame}
-\begin{frame}[label={sec:orgfe18c5e}]{Different ways of summarizing activity}
+\begin{frame}[label={sec:orgd8ef92d}]{Different ways of summarizing activity}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/neuron0.png}
 \end{center}  
@@ -187,7 +185,7 @@ $$ \overline{|x_1 - \overline{x}_1|} = \langle |x_{1,\mu} - \overline{x}_1 | \ra
 $$ \overline{x^2_1} = \langle x^2_{1,\mu} \rangle$$
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:orgc952005}]{Variance of a single neuron}
+\begin{frame}[label={sec:orga5d3301}]{Variance of a single neuron}
 $$ \var(x_1) = \langle (x_{1,\mu} - \overline{x}_1)^2 \rangle.$$
 \begin{itemize}
 \item Average energy relative to the mean
@@ -198,7 +196,7 @@ $$ \var(x_1) = \langle (x_{1,\mu} - \overline{x}_1)^2 \rangle.$$
 \includegraphics[width=0.5\textwidth]{figures/variance_vs_mad.png}
 \end{center}
 \end{frame}
-\begin{frame}[label={sec:org78486a9}]{Covariance of neural populations}
+\begin{frame}[label={sec:orgcd2fabd}]{Covariance of neural populations}
 \begin{itemize}
 \item Neurons don't respond independently, but frequently \textbf{co}vary
 \end{itemize}
@@ -214,7 +212,7 @@ $$ \cov(x_1, x_2) &= \langle (x_{1,\mu} - \overline{x}_1)(x_{\red{2},\mu} - \ove
 \end{align*}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org0e1e6b6}]{Covariance matrix}
+\begin{frame}[label={sec:org399c2b8}]{Covariance matrix}
 \begin{itemize}
 \item The \textbf{covariance matrix} tabulates covariance for all pairs of neurons.
 \[\cov(\xx) = \begin{bmatrix}\var(x_1) & \cov(x_1, x_2) & \dots \\ \cov(x_1, x_2) & \var(x_2) & \dots \\ \vdots & \vdots & \ddots \end{bmatrix} = \langle (\xx_\mu - \overline{\xx})(\xx_\mu - \overline{\xx})^T \rangle \]
@@ -229,8 +227,8 @@ $$ \cov(x_1, x_2) &= \langle (x_{1,\mu} - \overline{x}_1)(x_{\red{2},\mu} - \ove
 \end{itemize}
 \end{frame}
 \section{Variance of Pseudo-Neurons}
-\label{sec:org7e9a2a2}
-\begin{frame}[label={sec:org27d4c14}]{Where we're going}
+\label{sec:org38f06a9}
+\begin{frame}[label={sec:org597e149}]{Where we're going}
 \begin{itemize}
 \item Remember: PCA is about finding \bold{directions} that maximize variance:
 \end{itemize}
@@ -245,7 +243,7 @@ $$ \cov(x_1, x_2) &= \langle (x_{1,\mu} - \overline{x}_1)(x_{\red{2},\mu} - \ove
 \item PCA = find the pseudo-neurons with the largest variance.
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org4529351}]{Variance of a single neuron from covariance}
+\begin{frame}[label={sec:org7fd38da}]{Variance of a single neuron from covariance}
 \begin{itemize}
 \item Previously we just `took' the data \(x_{1,\mu}\)  for neuron 1.
 \item This is projecting the population vector \(\xx_\mu\) along the first coordinate: $$x_{1,\mu} = \xx_\mu^T \ee_1.$$
@@ -267,7 +265,7 @@ $$ \cov(x_1, x_2) &= \langle (x_{1,\mu} - \overline{x}_1)(x_{\red{2},\mu} - \ove
 \item So, the variance of neuron 1 is \bold{covariance along $\ee_1$}.
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org4e2f92f}]{Other orthonormal coordinates define pseudo-neurons}
+\begin{frame}[label={sec:org34f6646}]{Other orthonormal coordinates define pseudo-neurons}
 \begin{itemize}
 \item Previously we described population activity in terms of standard coordinates \(\ee_1, \ee_2, \dots\) of neurons:
 $$ \xx = x_1 \ee_1 + x_2 \ee_2 + \dots $$
@@ -280,7 +278,7 @@ $$ \xx = \tilde x_1 \tilde \ee_1 + \tilde x_2 \tilde \ee_2 + \dots $$
 \caption{Responses of neurons and pseudo-neurons to the first odour.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org5a30a20}]{Variance of a pseudo-neuron along \(\uu_1\)}
+\begin{frame}[label={sec:orgb8e6065}]{Variance of a pseudo-neuron along \(\uu_1\)}
 \begin{itemize}
 \item Activity of the \bold{pseudo}neuron: $$\tilde x_{1,\mu} = \xx_\mu^T \uu_1.$$
 \item Mean activity of the pseudoneuron:
@@ -301,7 +299,7 @@ $$ \xx = \tilde x_1 \tilde \ee_1 + \tilde x_2 \tilde \ee_2 + \dots $$
 \item So, the variance of the pseudoneuron is \bold{covariance along $\uu_1$}.
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org1ee8960}]{Variance of \emph{any} pseudoneuron}
+\begin{frame}[label={sec:org699a0e3}]{Variance of \emph{any} pseudoneuron}
 \begin{itemize}
 \item Following the pattern, variance of a pseudoneuron \(\tilde x = \xx^T\uu\) is 
 $$ \var(\tilde x) = \uu^T \cov(\xx) \uu.$$
@@ -311,8 +309,8 @@ $$ \var(\tilde x) = \uu^T \cov(\xx) \uu.$$
 \end{itemize}
 \end{frame}
 \section{Some Facts about Matrices}
-\label{sec:orgb232b27}
-\begin{frame}[label={sec:org76b084b}]{Matrices}
+\label{sec:orgc124dea}
+\begin{frame}[label={sec:org2551344}]{Matrices}
 \begin{itemize}
 \item Some matrices we've already encountered:
 \end{itemize}
@@ -327,10 +325,10 @@ $$ \var(\tilde x) = \uu^T \cov(\xx) \uu.$$
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org9b5ddea}]{Different ways to view matrices}
+\begin{frame}[label={sec:org1aaafe6}]{Different ways to view matrices}
 \[ \mathbf{A} = \underbrace{\begin{bmatrix} A_{11}, & A_{12}, & \dots \\ A_{21}, & A_{22} & \dots \\ \vdots & \vdots & \ddots \end{bmatrix}}_{\text{Table of elements}} = \underbrace{\begin{bmatrix} \rr_1^T \\ \rr_2^T \\ \vdots \\ \rr_M^T \end{bmatrix}}_{\text{Stacked rows}} = \underbrace{\begin{bmatrix} \cc_1,& \cc_2, & \cc_3, & \dots & \cc_N \end{bmatrix}}_{\text{Stacked columns}}. \]
 \end{frame}
-\begin{frame}[label={sec:orgb58b725}]{Matrix operations}
+\begin{frame}[label={sec:orga31f824}]{Matrix operations}
 \begin{itemize}
 \item \bold{Linearly} transform N-dimensional inputs \(\xx\) into M-dimensional outputs \(\yy\), \[ \yy = \mathbf{A} \xx.\]
 \item Can think of this element-wise:
@@ -341,7 +339,7 @@ $$ \yy = \begin{bmatrix} y_1 \\ y_2\\ \vdots\\ y_M \end{bmatrix} = \begin{bmatri
 $$ \yy = \sum_{i=1}^N \cc_i x_i.$$
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org427465c}]{Example Matrices}
+\begin{frame}[label={sec:orgf620d2c}]{Example Matrices}
 \centering
 \begin{array}{l c l}
 \textbf{Name} & \textbf{Matrix } \mathbf{A}  & \textbf{Action } \yy = \mathbf{A} \xx \\ \hline
@@ -354,7 +352,7 @@ $$ \yy = \sum_{i=1}^N \cc_i x_i.$$
 \text{Rotation} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \yy \text{ is $\xx$ rotated by $\theta$.}
 \end{array}
 \end{frame}
-\begin{frame}[label={sec:orgef95a68}]{Composing transformations}
+\begin{frame}[label={sec:org3f55cbf}]{Composing transformations}
 \begin{itemize}
 \item We can form complex transformations by composing simple ones.
 \item For example, a scaling and a rotation:
@@ -362,8 +360,8 @@ $$ \yy = \sum_{i=1}^N \cc_i x_i.$$
 $$ \yy = \underbrace{\begin{bmatrix} a & 0 \\ 0 & b \end{bmatrix}}_{\text{scaling}} \underbrace{\begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix}}_{\text{rotation}} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \underbrace{\mathbf{D R}}_{\mathbf A} \xx.$$
 \end{frame}
 \section{Singular Value Decomposition}
-\label{sec:orgf2eb6dd}
-\begin{frame}[label={sec:org2ec7e0a}]{All matrices are diagonal matrices (in the right coordinates)}
+\label{sec:orgc710042}
+\begin{frame}[label={sec:org0972dd1}]{All matrices are diagonal matrices (in the right coordinates)}
 \begin{itemize}
 \item Diagonal matrices were easy to work with
 \end{itemize}
@@ -381,7 +379,7 @@ $$ \yy = \underbrace{\begin{bmatrix} a & 0 \\ 0 & b \end{bmatrix}}_{\text{scalin
 $$ \AA  = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}}.$$
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org8cac9d2}]{Three parts of Singular Value Decomposition}
+\begin{frame}[label={sec:org1bd0e79}]{Three parts of Singular Value Decomposition}
 $$ \AA  = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}}.$$
 \begin{itemize}
 \item Columns of \(\VV\) form orthonormal coordinates for the \bold{input} space.
@@ -395,21 +393,21 @@ $$ \AA  = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \unde
 \end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org4748740}]{Three transformations in Singular Value Decomposition}
+\begin{frame}[label={sec:orgf44baa2}]{Three transformations in Singular Value Decomposition}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/svd_parts.png}
 \caption{Three transformations in Singular Value Decomposition (Wikipedia).}
 \end{figure}  
 \end{frame}
-\begin{frame}[label={sec:org0be965e}]{Three matrices of Singular Value Decomposition}
+\begin{frame}[label={sec:orgde2d8b8}]{Three matrices of Singular Value Decomposition}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/svd_blocks.png}
 \caption{Three matrices of Singular Value Decomposition (Wikipedia).}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:orgbd1f0dd}]{Three steps of Singular Value Decomposition}
+\begin{frame}[label={sec:org12e8b91}]{Three steps of Singular Value Decomposition}
 $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}} \xx.$$
 \begin{enumerate}
 \item Project \(\xx\) onto the input coordinates:
@@ -420,7 +418,7 @@ $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \u
 \[ \UU \SS \VV^T \xx = [\uu_1, \uu_2, \dots, \uu_N] \begin{bmatrix}s_1 \tilde x_1 \\ s_2 \tilde x_2 \\ \dots \\ s_N \tilde x_N \end{bmatrix} = \uu_1 s_1 \tilde x_1 + \uu_2 s_2 \tilde x_2 + \dots  \]
 \end{enumerate}
 \end{frame}
-\begin{frame}[label={sec:org3ec8748}]{SVD of simple matrices}
+\begin{frame}[label={sec:orgcfa73ab}]{SVD of simple matrices}
 \centering
 \begin{array}{l c c c c}
 \textbf{Name} & \mathbf{A}  & \UU & \mathbf{s} & \VV \\ \hline
@@ -434,14 +432,14 @@ $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \u
 \end{array}
 \end{frame}
 
-\begin{frame}[label={sec:org9e8b6a9}]{SVD of covariance matrices}
+\begin{frame}[label={sec:orgdaec77b}]{SVD of covariance matrices}
 \begin{itemize}
 \item Remember why we care: we're after the variance of pseudoneurons $$\uu^T \cov(\xx) \uu.$$
 \item For covariance matrices, the input and output coordinates are the same $$ \cov(\xx) = \VV \SS \VV^T $$
 \item Equalizer: Inputs are analyzed in \(\VV\) coordinates and scaled. $$  \cov(\xx) \uu = \sum_i \vv_i \underbrace{s_i}_{\text{scale}} \underbrace{\vv_i^T \uu}_{\text{project}} $$
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org65a601c}]{SVD and eigendecomposition}
+\begin{frame}[label={sec:org5347c00}]{SVD and eigendecomposition}
 \begin{itemize}
 \item All matrices have SVDs: \(\mathbf{X} = \UU \SS \VV^T\)
 \item For covariance matrices, the input and output coordinates are the same: \(\cov(\xx) \propto \VV \SS^2 \VV^T\)
@@ -455,7 +453,7 @@ $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \u
 \end{itemize}
 \end{frame}
 
-\begin{frame}[label={sec:org9f2bf32}]{Maximum variance direction from SVD}
+\begin{frame}[label={sec:org4593e13}]{Maximum variance direction from SVD}
 \begin{itemize}
 \item We can use SVD to read-off the maximum variance direction(s) we need!
 \item Variance along a direction \(\uu\)
@@ -468,8 +466,8 @@ $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \u
 \end{itemize}
 \end{frame}
 \section{Dimensionality Reduction with PCA}
-\label{sec:org5bcf51b}
-\begin{frame}[label={sec:org6a62deb}]{Finally: Dimension Reduction with PCA}
+\label{sec:org62f774a}
+\begin{frame}[label={sec:org2909573}]{Finally: Dimension Reduction with PCA}
 \begin{itemize}
 \item Project data onto maximum variance directions: \(\widetilde{\mathbf{X}} = \mathbf{X} \VV.\)
 \end{itemize}
@@ -480,12 +478,12 @@ $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \u
 \item Notice: projections are decorrelated
 \end{itemize}
 \end{frame}
-\begin{frame}[label={sec:org1dd0bc3}]{Examining the Principal Components}
+\begin{frame}[label={sec:org7add601}]{Examining the Principal Components}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/pca_projections_pcs.png}
 \end{center}
 \end{frame}
-\begin{frame}[label={sec:orgd1e8410}]{Measuring dimensionality with Participation Ratio}
+\begin{frame}[label={sec:org2cbf73a}]{Measuring dimensionality with Participation Ratio}
 \begin{itemize}
 \item Variances tell us energy in each direction
 \item Use this as a measure of dimensionality
@@ -495,7 +493,7 @@ $$ \text{PR} = {(\sum_i s_i)^2 \over \sum_i s_i^2}.$$
 \includegraphics[width=1.0\textwidth]{figures/participation_ratio.png}
 \end{center}  
 \end{frame}
-\begin{frame}[label={sec:org6cb6738}]{Approximation/Denoising with PCA}
+\begin{frame}[label={sec:orgad854a2}]{Approximation/Denoising with PCA}
 \begin{itemize}
 \item Approximate using first \(K\) projections
 \begin{align*}
@@ -509,14 +507,14 @@ $$ \text{PR} = {(\sum_i s_i)^2 \over \sum_i s_i^2}.$$
 \caption{Approximating digits data using PCA (Bishop Fig 12.5)}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:orgfe9230c}]{Approximation/Denoising with PCA}
+\begin{frame}[label={sec:org9c9656e}]{Approximation/Denoising with PCA}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/pca_tobias.png}
 \caption{Approximating odour responses using PCA.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org57938c5}]{How many dimensions to keep?}
+\begin{frame}[label={sec:orga537d12}]{How many dimensions to keep?}
 \begin{itemize}
 \item The singular values tell us how much variance is explained by each dimension.
 \item We can use this to decide how many dimensions to keep.
@@ -530,8 +528,8 @@ $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
 \end{figure}
 \end{frame}
 \section{Adjacent Approaches}
-\label{sec:orga72fa5c}
-\begin{frame}[label={sec:org332bf6e}]{Exploiting nonlinearity with Kernel PCA}
+\label{sec:org4b3f069}
+\begin{frame}[label={sec:org88c0f05}]{Exploiting nonlinearity with Kernel PCA}
 \begin{itemize}
 \item PCA can be expressed in terms of similarity \(k(\xx,\yy)\) between data points.
 \item PCA uses linear similarity \(k(\xx, \yy) = \xx^T \yy\).
@@ -544,7 +542,7 @@ $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
 \caption{ISOMAP computes similarity as distance on the manifold.}
 \end{figure}
 \end{frame}
-\begin{frame}[label={sec:org99f317b}]{Comparing different datasets with CCA}
+\begin{frame}[label={sec:orgdd9f4a7}]{Comparing different datasets with CCA}
 \begin{itemize}
 \item PCA finds maximum variance directions in one dataset
 \item CCA finds maximum co-variance directions in two datasets
@@ -553,7 +551,7 @@ $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
 \includegraphics[width=1.0\textwidth]{figures/cca_projections.png}
 \end{center}  
 \end{frame}
-\begin{frame}[label={sec:orgf00a985}]{Supervised learning with LDA}
+\begin{frame}[label={sec:orgefe9b50}]{Supervised learning with LDA}
 \begin{itemize}
 \item PCA doesn't care about class labels.
 \item Maximum variance isn't always best for discrimination.
@@ -566,8 +564,8 @@ $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
 \end{figure}]]
 \end{frame}
 \section{Summary}
-\label{sec:org1d9ee37}
-\begin{frame}[label={sec:org970a90c}]{Summary}
+\label{sec:orgcb87a1a}
+\begin{frame}[label={sec:org3cb8743}]{Summary}
 \begin{itemize}
 \item Neural data arrive in single neuron coordinates.
 \item Other coordinates may be more informative about the data.
@@ -579,5 +577,5 @@ $$ \text{EV}(K) = { \sum_{i=1}^K s_i \over \sum_{i=1}^D s_i}.$$
 \end{itemize}
 \end{frame}
 \section{Thanks for listening!}
-\label{sec:orgebdfa63}
+\label{sec:org5778b6f}
 \end{document}

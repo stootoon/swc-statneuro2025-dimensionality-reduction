@@ -2,15 +2,17 @@
 #+TITLE: Dimensionality Reduction using\newline Principal Component Analysis
 #+BEAMER_SHORT_TITLE: Dimensionality Reduction using PCA
 #+AUTHOR: Sina Tootoonian
-#+DATE:
+#+EMAIL: sina.tootoonian@crick.ac.uk
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [presentation,smaller]
+#+LaTeX_HEADER: \institute{The Francis Crick Institute, London \\ \href{mailto:sina.tootoonian@crick.ac.uk}{sina.tootoonian@crick.ac.uk}}
+#+LaTeX_HEADER: \date{\today}
 #+LaTeX_HEADER: \usetheme{Madrid}
 #+LaTeX_HEADER: \usefonttheme[onlymath]{serif}
 #+LaTeX_HEADER: \usecolortheme{default}
 #+LaTeX_HEADER: \AtBeginSection{\frame{\sectionpage}}
 #+LaTeX_HEADER: \input{preamble.tex}
-#+OPTIONS: H:2 toc:t title:t
+#+OPTIONS: H:2 toc:nil title:t
 #+EXPORT_EXCLUDE_TAGS: noexport
 * Motivation
 ** DONE Neuroscience data arrive high dimensional
@@ -78,7 +80,7 @@ CLOSED: [2025-02-02 Sun 07:32]
 ** DONE The importance of coordinate systems
    CLOSED: [2025-01-31 Fri 06:24]
 - Laws of physics don't depend on coordinates.
-- Laws of neuroscience depends on having the right coordiantes
+- Laws of neuroscience depends on having the \bold{right} coordinates.
   - Usually not the ones your data is recorded in.
 - PCA finds coordinates that are \bold{matched to the data}.    
 #+ATTR_LATEX: :width 1.0\textwidth
