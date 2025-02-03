@@ -121,27 +121,6 @@ CLOSED: [2025-02-02 Sun 10:45]
 - Susceptible to outliers \color{red}\textbf{X}\color{black}
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:figures/variance_vs_mad.png]]
-* Variance of Pseudo-Neurons
-** TODO Where we're going
-- Remember: PCA is about finding directions that maximize variance.
-- Just as the standard coordinate direction  
-** DONE Variance of a single neuron (again)
-CLOSED: [2025-02-02 Sun 11:23]
-- Previously we just `took' the data for neuron 1.
-- We can view this as first projecting along the first coordinate: $$x_{1,\mu} = \xx_\mu^T \ee_1$$
-- Then computing variance $$\var(x_1) = \langle (x_{\mu,1} - \overline{x}_1)^2 \rangle$$
-- Variance of neuron 1 is variance along $\ee_1$.  
-** DONE Other orthonormal coordinates
-CLOSED: [2025-02-02 Sun 10:04]
-We can describe the same activity in terms of `pseudo-neurons.'
-$$ \xx = \tilde x_1 \tilde \ee_1 + \tilde x_2 \tilde \ee_2 + \dots $$
-#+ATTR_LATEX: :width 1.0\textwidth
-#+CAPTION: Responses of neurons and pseudo-neurons to the first odour.
-file:figures/coordinate_transform.png
-** CANCELED Example: Sounds                                        :noexport:
-CLOSED: [2025-02-02 Sun 10:04]
-- FIG: Default coordinates: 
-- FIG: Frequency coordinates: 
 ** DONE Covariance of neural populations
 CLOSED: [2025-02-02 Sun 11:06]
 - Neurons don't respond independently, but frequently \textbf{co}vary
@@ -162,6 +141,48 @@ CLOSED: [2025-02-02 Sun 11:17]
 #+ATTR_LATEX: :width 1.0\textwidth
 [[file:figures/covariance_matrix.png]]  
 - Not just useful book keeping...
+* Variance of Pseudo-Neurons
+** DONE Where we're going
+CLOSED: [2025-02-03 Mon 09:40]
+- Remember: PCA is about finding \bold{directions} that maximize variance:
+#+ATTR_LATEX: :width 1.0\textwidth
+[[file:figures/pca_illustration.png]]
+- The standard coordinate directions correspond to single neurons.
+- The variance of single neurons is variance along these directions.
+- We can define other directions as \bold{pseudo-neurons}.
+- The variance of pseudo-neurons is variance along these directions.
+- PCA = find the pseudo-neurons with the largest variance.
+** DONE Variance of a single neuron from covariance
+CLOSED: [2025-02-02 Sun 11:23]
+- Previously we just `took' the data $x_{1,\mu}$  for neuron 1.
+- This is projecting the population vector $\xx_\mu$ along the first coordinate: $$x_{1,\mu} = \xx_\mu^T \ee_1.$$
+- We can then compute the mean activity
+  \begin{align*}
+  \overline{x}_1 &= \langle \xx_\mu^T \ee_1 \rangle = \langle \xx_\mu \rangle^T \ee_1 = \overline{\xx}^T  \ee_1.
+  \end{align*}
+- The variance is then
+\begin{align*}
+ \var(x_1) &= \langle (x_{1,\mu}- \overline{\tilde x}_1)^2 \rangle \\
+&= \langle \left( \xx_\mu^T \ee_1  - \overline{\xx}_\mu^T \ee_1 \right)^2 \rangle\\
+&= \langle \left( (\xx_\mu - \overline{\xx})^T\ee_1 \right)^2 \rangle\\
+&= \langle \ee_1^T(\xx_\mu - \overline{\xx})  (\xx_\mu - \overline{\xx})^T\ee_1  \rangle\\
+&= \ee_1^T \langle (\xx_\mu - \overline{\xx}) (\xx_\mu - \overline{\xx})^T \rangle \ee_1\\
+&= \ee_1^T \cov(\xx) \ee_1.
+\end{align*}
+- So, the variance of neuron 1 is \bold{covariance along $\ee_1$}.  
+** DONE Other orthonormal coordinates define pseudo-neurons
+CLOSED: [2025-02-02 Sun 10:04]
+- Previously we described population activity in terms of standard coordinates $\ee_1, \ee_2, \dots$ of neurons:
+  $$ \xx = x_1 \ee_1 + x_2 \ee_2 + \dots $$
+- We can describe the same activity $\xx$ in other orthonormal coordinates $\tilde \ee_1, \tilde \ee_2, \dots$ of \bold{pseudo-neurons}:
+$$ \xx = \tilde x_1 \tilde \ee_1 + \tilde x_2 \tilde \ee_2 + \dots $$
+#+ATTR_LATEX: :width 1.0\textwidth
+#+CAPTION: Responses of neurons and pseudo-neurons to the first odour.
+file:figures/coordinate_transform.png
+** CANCELED Example: Sounds                                        :noexport:
+CLOSED: [2025-02-02 Sun 10:04]
+- FIG: Default coordinates: 
+- FIG: Frequency coordinates: 
 ** CANCELED Default coordinates can hide covariability             :noexport:
 CLOSED: [2025-02-02 Sun 11:21]
 - Default coordinates hide covariability
@@ -171,28 +192,30 @@ CLOSED: [2025-02-02 Sun 11:21]
 - Solution: change coordinates!
 - FIG: Data in stadnard coords, data in rotated coords]
 # [FIG: Network diagram]  
-** DONE Variance of one pseudoneuron
+** DONE Variance of a pseudo-neuron along $\uu_1$
    CLOSED: [2025-01-31 Fri 06:50]
-- Activity of a \bold{pseudo}neuron:
-  $$ \tilde{x}_{1,\mu} = \xx_\mu^T \uu_1 $$
-- Mean activity of a pseudoneuron:
+- Activity of the \bold{pseudo}neuron: $$\tilde x_{1,\mu} = \xx_\mu^T \uu_1.$$
+- Mean activity of the pseudoneuron:
   \begin{align*}
-  \overline{\tilde{x}}_1 &= \langle \xx_\mu^T \uu_1 \rangle\\
-  &= \langle \xx^T_\mu \rangle \uu_1\\
-  &= \overline{\xx}^T  \uu_1.
+  \overline{\tilde x}_1 &= \langle \xx_\mu^T \uu_1 \rangle = \langle \xx_\mu \rangle^T \uu_1 = \overline{\xx}^T  \uu_1.
   \end{align*}
-- Variance of a pseudoneuron
+- The variance is then
 \begin{align*}
-\var(\tilde x_1) &= \langle (\tilde x_1 - \overline{\tilde x}_1)^2 \rangle \\
-&= \langle \left( \xx_\mu^T \uu_1  - \overline{\xx}_\mu^T \uu_1 \right)^2 \rangle
+ \var(\tilde x_1) &= \langle (\tilde x_{1,\mu}- \overline{\tilde x}_1)^2 \rangle \\
+&= \langle \left( \xx_\mu^T \uu_1  - \overline{\xx}_\mu^T \uu_1 \right)^2 \rangle\\
+&= \langle \left( (\xx_\mu - \overline{\xx})^T\uu_1 \right)^2 \rangle\\
+&= \langle \uu_1^T(\xx_\mu - \overline{\xx})  (\xx_\mu - \overline{\xx})^T\uu_1  \rangle\\
+&= \uu_1^T \langle (\xx_\mu - \overline{\xx}) (\xx_\mu - \overline{\xx})^T \rangle \uu_1\\
+&= \uu_1^T \cov(\xx) \uu_1.
 \end{align*}
+- So, the variance of the pseudoneuron is \bold{covariance along $\uu_1$}.  
 ** DONE Variance of \emph{any} pseudoneuron
 CLOSED: [2025-02-02 Sun 07:11]
-- We don't have to go through the procedure again!
-- Variance of any pseudoneuron $\tilde x = \xx^T\uu$ is
+- Following the pattern, variance of a pseudoneuron $\tilde x = \xx^T\uu$ is 
   $$ \var(\tilde x) = \uu^T \cov(\xx) \uu.$$
 - PCA now becomes finding the $\uu$ that maximizes this variance.
-- How do we do this?  
+- How do we do this? By decomposing the covariance matrix!
+- But first...
 * Some Facts about Matrices
 ** DONE Matrices
 CLOSED: [2025-02-02 Sun 11:39]
