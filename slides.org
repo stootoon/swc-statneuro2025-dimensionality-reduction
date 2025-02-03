@@ -50,15 +50,22 @@ CLOSED: [2025-02-02 Sun 14:15]
 #+ATTR_LATEX: :width 1.0\textwidth
 #+CAPTION: Projecting data (A) along directions that capture much (B) or little (C) variance. From CS 229.
 [[file:figures/example_proj.png]]
-** IN PROGRESS Outline
-- Variance of single neurons
-  - Coordinates for data
-  - Summarizing single neuron activity with variance
-    
-- Neurons and Pseudo-neurons 
-- Measuring activity of single neurons with variance
-- Measuring co-activity of neurons with covariance
-- Relating variance of pseudo-neurons to covariance
+** DONE Outline
+CLOSED: [2025-02-03 Mon 10:55]
+1. Single neurons
+  - Single neurons as coordinates.
+  - Variance of single neurons, covariance of populations of neurons.
+  - Variance of single neurons as covariance along standard coordinates.
+2. Pseudo-neurons
+  - Other orthonormal coordinates define \bold{pseudo-neurons}.
+  - Variance of pseudo-neurons as covariance along their coordinates.
+  - PCA = finding pseudo-neurons with maximum variance.
+3. PCA by Singular Value Decomposition
+  - Some facts about matrices.
+  - Singular Value Decomposition (SVD).
+  - Maximum variance directions from SVD.
+4. Application to neural responses.
+5. Adjacent approaches: Kernel PCA, CCA, LDA.
 * Variance of Single Neurons
 ** DONE Notions of dimensionality
 CLOSED: [2025-02-02 Sun 07:32]
@@ -279,11 +286,15 @@ CLOSED: [2025-02-02 Sun 11:45]
   - Use $\VV$ coordinates for the input, and
   - Use $\UU$ coordinates for the output, then
   - $\AA$ is a scaling!
-** DONE Three parts of Singular Value Decomposition
+** DONE Three transformations in Singular Value Decomposition
 CLOSED: [2025-02-02 Sun 11:45]
 #+ATTR_LATEX: :width 0.6\textwidth
-#+CAPTION: Three parts of Singular Value Decomposition (Wikipedia).
+#+CAPTION: Three transformations in Singular Value Decomposition (Wikipedia).
 [[file:figures/svd_parts.png]]  
+** DONE Three matrices of Singular Value Decomposition
+#+ATTR_LATEX: :width 0.8\textwidth
+#+CAPTION: Three matrices of Singular Value Decomposition (Wikipedia).
+[[file:figures/svd_blocks.png]]
 ** DONE Three steps of Singular Value Decomposition
 CLOSED: [2025-02-01 Sat 22:51]
   $$ \AA \xx = \underbrace{\UU}_{\text{rotate}} \underbrace{\SS}_{\text{scale}} \underbrace{\VV^T}_{\text{project}} \xx.$$
@@ -313,14 +324,18 @@ CLOSED: [2025-02-01 Sat 22:15]
 - For covariance matrices, the input and output coordinates are the same $$ \cov(\xx) = \VV \SS \VV^T $$
 - Equalizer: Inputs are analyzed in $\VV$ coordinates and scaled. $$  \cov(\xx) \uu = \sum_i \vv_i \underbrace{s_i}_{\text{scale}} \underbrace{\vv_i^T \uu}_{\text{project}} $$
 # - Same as eigendecomposition (for covariance matrices!)
-** TODO SVD and Eigendecomposition                                 :noexport:
-- FIG: Data with different participation ratios
-- Square matrices: Transforming the same space
-- U S V'
-- We can express as operations in the same coordinates
-- U G U'
-- G will be complex
-* Maximum Variance Directions
+** DONE SVD and eigendecomposition                        
+CLOSED: [2025-02-03 Mon 11:41]
+- All matrices have SVDs: \(\mathbf{X} = \UU \SS \VV^T\)
+- For covariance matrices, the input and output coordinates are the same: \(\cov(\xx) \propto \VV \SS^2 \VV^T\)
+- Also known as the \bold{eigendecomposition} of the covariance matrix.
+- The right singular vectors $\VV$ of the data matrix are the eigenvectors/singular vectors of the covariance matrix.
+- The singular values of the data matrix and the cov. matrix are closely related:
+  \begin{align*}
+  \text{Singular values of cov. matrix} &= \text{Eigenvalues of the cov. matrix}\\
+   &\propto \text{\bold{Squared} sing. values of the data matrix.}
+   \end{align*}
+   
 ** DONE Maximum variance direction from SVD
 CLOSED: [2025-02-01 Sat 22:31]
 - We can use SVD to read-off the maximum variance direction(s) we need!
@@ -331,9 +346,10 @@ CLOSED: [2025-02-01 Sat 22:31]
   \end{align*}
 - Maximum variance direction is $\vv_1$
 - Next highest variance direction is $\vv_2$, etc.
+* Dimensionality Reduction with PCA
 ** DONE Finally: Dimension Reduction with PCA
 CLOSED: [2025-02-02 Sun 14:25]
-- Project data onto maximum variance directions
++ Project data onto maximum variance directions: \(\widetilde{\mathbf{X}} = \mathbf{X} \VV.\)
 #+ATTR_LATEX: :width 1.0\textwidth
 [[file:figures/pca_projections.png]]
 - Notice: projections are decorrelated
@@ -376,7 +392,7 @@ CLOSED: [2025-02-02 Sun 13:57]
 CLOSED: [2025-02-01 Sat 22:48]
 ** CANCELED Examples: Faces dataset                                :noexport:
 CLOSED: [2025-02-01 Sat 22:48]
-* Adjacent Approaches [3/3]
+* Adjacent Approaches
 ** DONE Exploiting nonlinearity with Kernel PCA
 CLOSED: [2025-02-02 Sun 12:52]
 - PCA can be expressed in terms of similarity $k(\xx,\yy)$ between data points.
@@ -400,9 +416,16 @@ CLOSED: [2025-02-02 Sun 13:43]
 #+ATTR_LATEX: :width 0.7\textwidth
 #+CAPTION: (Bishop Fig. 12.7) The first PC isn't always best for discrimination.
 file:figures/pca_lda.png]]
-* TODO Summary
-** TODO Summary
-
+* Summary
+** Summary
+- Neural data arrive in single neuron coordinates.
+- Other coordinates may be more informative about the data.
+- PCA finds coordinates that capture most variance.
+- Can be found through SVD.
+- Can be used for dimensionality reduction and visualization.
+- Can be used for approximation and denoising.
+- Many extensions, including Kernel PCA, CCA, LDA.
+* Thanks for listening!
 * CANCELED PCA for approximation [0/5]                             :noexport:
 ** TODO Example of approximation
 - Recall original definition of data vectors
