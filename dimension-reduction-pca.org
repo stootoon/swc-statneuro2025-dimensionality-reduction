@@ -6,7 +6,7 @@
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [presentation,smaller]
 #+LaTeX_HEADER: \institute{The Francis Crick Institute, London \\ \href{mailto:sina.tootoonian@crick.ac.uk}{sina.tootoonian@crick.ac.uk}}
-#+LaTeX_HEADER: \date{\today}
+#+LaTeX_HEADER: \date{February 3, 2025}
 #+LaTeX_HEADER: \usetheme{Madrid}
 #+LaTeX_HEADER: \usefonttheme[onlymath]{serif}
 #+LaTeX_HEADER: \usecolortheme{default}
@@ -157,9 +157,9 @@ CLOSED: [2025-02-03 Mon 09:40]
 #+ATTR_LATEX: :width 1.0\textwidth
 [[file:figures/pca_illustration.png]]
 - The standard coordinate directions correspond to single neurons.
-- The variance of single neurons is variance along these directions.
+- The variance of single neurons is \bold{co}variance along these directions.
 - We can define other directions as \bold{pseudo-neurons}.
-- The variance of pseudo-neurons is variance along these directions.
+- The variance of pseudo-neurons is \bold{co}variance along these directions.
 - PCA = find the pseudo-neurons with the largest variance.
 ** DONE Variance of a single neuron from covariance
 CLOSED: [2025-02-02 Sun 11:23]
@@ -171,7 +171,7 @@ CLOSED: [2025-02-02 Sun 11:23]
   \end{align*}
 - The variance is then
 \begin{align*}
- \var(x_1) &= \langle (x_{1,\mu}- \overline{\tilde x}_1)^2 \rangle \\
+ \var(x_1) &= \langle (x_{1,\mu}- \overline{x}_1)^2 \rangle \\
 &= \langle \left( \xx_\mu^T \ee_1  - \overline{\xx}_\mu^T \ee_1 \right)^2 \rangle\\
 &= \langle \left( (\xx_\mu - \overline{\xx})^T\ee_1 \right)^2 \rangle\\
 &= \langle \ee_1^T(\xx_\mu - \overline{\xx})  (\xx_\mu - \overline{\xx})^T\ee_1  \rangle\\
@@ -316,7 +316,7 @@ CLOSED: [2025-02-02 Sun 12:01]
 \text{Negation} & \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} & \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
 \text{All ones} & \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} & {1\over \sqrt{2}}\begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix} & \begin{bmatrix} 2, & 0\end{bmatrix} & {1 \over \sqrt{2}}\begin{bmatrix} 1 & 1 \\ -1 & 1 \end{bmatrix} \\[10pt]
 \text{Diagonal} & \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} & \begin{bmatrix} 2, & 3\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
-\text{Permutation} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} \\[10pt]
+\text{Permutation} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt]
 \text{Rotation by $\theta$} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} & \begin{bmatrix} 1, & 1\end{bmatrix} & \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \\[10pt] 
 \end{array}
 
